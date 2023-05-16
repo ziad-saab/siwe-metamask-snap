@@ -1,24 +1,24 @@
 {
   "version": "0.1.0",
-  "description": "An example Snap written in TypeScript.",
-  "proposedName": "TypeScript Example Snap",
+  "description": "A snap with a companion Dapp that uses SIWE to retrieve an API key",
+  "proposedName": "SIWE Snap Example",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MetaMask/template-snap-monorepo.git"
+    "url": "https://github.com/ziad-saab/siwe-metamask-snap.git"
   },
   "source": {
-    "shasum": "usoZPr0F4J12BaVbuDQRCCIW2cj/N5gZD7ccOJfDZV8=",
+    "shasum": "JckepxXPG30I3T9f23KApmeie1MSCkPGZ28w4C8r8+8=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
         "iconPath": "images/icon.svg",
-        "packageName": "snap",
+        "packageName": "siwe-metamask-snap",
         "registry": "https://registry.npmjs.org/"
       }
     }
   },
   "initialPermissions": {
-    "snap_dialog": {},
+    "snap_manageState": {},
     "endowment:rpc": {
       "dapps": true,
       "snaps": false

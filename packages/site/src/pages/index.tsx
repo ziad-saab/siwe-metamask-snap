@@ -4,16 +4,20 @@ import { MetamaskActions, MetaMaskContext } from '../hooks';
 import {
   connectSnap,
   getSnap,
-  sendHello,
+  makeAuthenticatedRequest,
   shouldDisplayReconnectButton,
+  signInWithEthereum,
+  signOut,
 } from '../utils';
 import {
   ConnectButton,
   InstallFlaskButton,
   ReconnectButton,
-  SendHelloButton,
   Card,
+  Button,
 } from '../components';
+import { useIsSignedIn } from '../hooks/useIsSignedIn';
+import { useSnapRequest } from '../hooks/useSnapRequest';
 
 const Container = styled.div`
   display: flex;
@@ -102,6 +106,8 @@ const ErrorMessage = styled.div`
 const Index = () => {
   const [state, dispatch] = useContext(MetaMaskContext);
 
+  const { isSignedIn, refreshIsSignedIn } = useIsSignedIn();
+
   const handleConnectClick = async () => {
     try {
       await connectSnap();
@@ -117,19 +123,32 @@ const Index = () => {
     }
   };
 
-  const handleSendHelloClick = async () => {
+  const signInHandler = async () => {
     try {
-      await sendHello();
+      await signInWithEthereum();
+      refreshIsSignedIn();
     } catch (e) {
       console.error(e);
       dispatch({ type: MetamaskActions.SetError, payload: e });
     }
   };
 
+  const signOutHandler = async () => {
+    await signOut();
+    refreshIsSignedIn();
+  };
+
+  const {
+    result: requestResult,
+    error: requestError,
+    isLoading: isLoadingResult,
+    makeRequest: makeSnapRequest,
+  } = useSnapRequest();
+
   return (
     <Container>
       <Heading>
-        Welcome to <Span>template-snap</Span>
+        Welcome to <Span>siwe-snap</Span>
       </Heading>
       <Subtitle>
         Get started by editing <code>src/index.ts</code>
@@ -156,7 +175,7 @@ const Index = () => {
             content={{
               title: 'Connect',
               description:
-                'Get started by connecting to and installing the example snap.',
+                'Get started by connecting to and installing the SIWE snap.',
               button: (
                 <ConnectButton
                   onClick={handleConnectClick}
@@ -185,22 +204,65 @@ const Index = () => {
         )}
         <Card
           content={{
-            title: 'Send Hello message',
+            title: 'Sign-in with Ethereum',
             description:
-              'Display a custom message within a confirmation screen in MetaMask.',
+              'Sign-in with Ethereum to a mock API. This will retrieve a mock API key, and send it to the snap for safekeeping.',
             button: (
-              <SendHelloButton
-                onClick={handleSendHelloClick}
-                disabled={!state.installedSnap}
-              />
+              <Button onClick={signInHandler} disabled={!state.installedSnap}>
+                Sign-in
+              </Button>
             ),
           }}
           disabled={!state.installedSnap}
-          fullWidth={
-            state.isFlask &&
-            Boolean(state.installedSnap) &&
-            !shouldDisplayReconnectButton(state.installedSnap)
-          }
+        />
+        <Card
+          content={{
+            title: 'Sign-out',
+            description: 'Remove the API key stored in the snap secure storage',
+            button: (
+              <Button onClick={signOutHandler} disabled={!state.installedSnap}>
+                Sign-out
+              </Button>
+            ),
+          }}
+          disabled={!state.installedSnap}
+        />
+        <Card
+          disabled={!state.installedSnap}
+          content={{
+            title: 'Signed in?',
+            description: isSignedIn ? 'YES' : 'NO',
+            button: (
+              <Button
+                onClick={refreshIsSignedIn}
+                disabled={!state.installedSnap}
+              >
+                Refresh
+              </Button>
+            ),
+          }}
+        />
+        <Card
+          disabled={!state.installedSnap}
+          fullWidth
+          content={{
+            title: 'Make authenticated request from snap',
+            description: (
+              <>
+                <p>Try to make an authenticated request from the Snap</p>
+                <p>Error: {requestError}</p>
+                <p>Result: {requestResult}</p>
+              </>
+            ),
+            button: (
+              <Button
+                onClick={makeSnapRequest}
+                disabled={!state.installedSnap || isLoadingResult}
+              >
+                Make request
+              </Button>
+            ),
+          }}
         />
         <Notice>
           <p>

@@ -32,7 +32,7 @@ const Link = styled.a`
   }
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
   display: flex;
   align-self: flex-start;
   align-items: center;
@@ -92,10 +92,6 @@ export const ReconnectButton = (props: ComponentProps<typeof Button>) => {
       <ButtonText>Reconnect</ButtonText>
     </Button>
   );
-};
-
-export const SendHelloButton = (props: ComponentProps<typeof Button>) => {
-  return <Button {...props}>Send message</Button>;
 };
 
 export const HeaderButtons = ({
