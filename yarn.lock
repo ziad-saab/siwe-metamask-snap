@@ -15608,7 +15608,6 @@ __metadata:
     "@metamask/eslint-config-typescript": ^10.0.0
     "@metamask/snaps-cli": ^0.32.2
     "@metamask/snaps-types": ^0.32.2
-    "@metamask/snaps-ui": ^0.32.2
     "@typescript-eslint/eslint-plugin": ^5.33.0
     "@typescript-eslint/parser": ^5.33.0
     buffer: ^6.0.3
